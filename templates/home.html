@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: white;
+        }
+
+        .title{
+            height: 100px;
+            text-align: center;
+            line-height: 100px; 
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        .form label{
+            color: black !important;
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+
+        h1 {
+            background: black;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        #container{
+            background-color: #fff;
+            border-radius: 8px;
+            width: 520px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+
+        textarea {
+            width: calc(100% - 100px);
+            padding: 16px;
+            margin-bottom: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: none;
+            overflow-y: hidden;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 15px;
+        }
+
+
+
+        a:hover,
+        input[type="submit"]:hover {
+            background-color: #45a049;
+            cursor: pointer;
+            color:  white !important;
+        }
+
+        .div-btn {
+            display: flex;
+            justify-content: center;
+            margin: 15px;
+        }
+        
+        .div-btn input[type="submit"],
+        .div-btn a {
+            margin-right: 10px;
+            padding: 12px;
+            
+            border: none;
+            color: white;
+            
+            font-size: 14px;
+            font-style: normal;
+            width: 30%;
+            border-radius: 4px;
+        }
+
+        input[type="submit"]{
+            background-color: black;
+        }
+
+        a{
+            text-decoration: none;
+            background-color: rgb(211, 210, 210);
+            color: black !important;
+        }
+
+        .after{
+            background-color: black;
+            height: 20px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        #line{
+            background-color: rgb(191, 191, 191);
+            height: 0.5px;
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div id = "container">
+        <div class = "title - box">
+            <h1>Phân loại cảm xúc!</h1>
+        </div>
+        
+        <div class= "form - box">
+            <form method="POST">
+                <label for="data">Nhập text tại đây:</label><br>
+                <textarea type="text" id="data" name="data" rows="1" ></textarea><br>
+                <input type="file" id="fileInput" name="fileInput" accept=".txt,.csv" onchange="loadFile()">
+<div id="fileDisplay" style="display: none;">
+    <span id="fileName"></span>
+    <button id="clearButton" onclick="clearFile()">Xóa</button>
+</div>
+
+<label for="model">Chọn mô hình:</label><br>
+    <select id="model" name="model">
+        <option value="bilstm">BiLSTM</option>
+        <option value="gcn">GCN</option>
+    </select><br>
+
+                <div class="div-btn">
+                    <a href="/">Làm mới</a>
+                    <input type="submit" value="Predict" onclick="showPrediction()">
+                </div>
+                <div id = "line"></div>
+                {% for prediction in predictions %}
+                    <img id="predictionChart" src="{{ prediction }}" alt="">
+                {% endfor %}
+
+            </form>
+        </div>
+
+        <div class="after"></div>
+
+    </div>
+
+    <script>
+
+        document.querySelector("form").addEventListener("submit", function() {
+            localStorage.setItem("data", document.getElementById("data").value);
+        });
+    
+        document.querySelector("form").addEventListener("submit", function() {
+            sessionStorage.setItem("data", document.getElementById("data").value);
+        });
+        
+        window.addEventListener("load", function() {
+            if (sessionStorage.getItem("data")) {
+                document.getElementById("data").value = sessionStorage.getItem("data");
+            }
+        });
+        
+        function loadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const textarea = document.getElementById('data');
+    
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+    
+            reader.onload = function(e) {
+                textarea.value = e.target.result;
+            };
+    
+            reader.readAsText(file);
+        }
+
+        
+        
+
+    </script>
+
+</body>
+</html>
